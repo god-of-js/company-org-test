@@ -3,4 +3,4 @@ import ceo from "./data";
 
 const employeeOrganization = new EmployeeOrgApp(ceo);
 
-employeeOrganization.move(6, 2);
+employeeOrganization.move(3, 5);
