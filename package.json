@@ -1,0 +1,22 @@
+{
+  "name": "company-org-test",
+  "version": "1.0.0",
+  "description": "an OOP test",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/god-of-js/company-org-test.git"
+  },
+  "keywords": [
+    "typescript"
+  ],
+  "author": "godofjs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/god-of-js/company-org-test/issues"
+  },
+  "homepage": "https://github.com/god-of-js/company-org-test#readme"
+}
