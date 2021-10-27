@@ -8,7 +8,7 @@ export interface FoundSubordinate {
   subordinate: Employee; 
   supervisorId: number
 }
-export interface FoundSubordinateIndex { id: number; index: number }
+
 
 export interface IEmployeeOrgApp {
   ceo: Employee;
