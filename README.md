@@ -10,6 +10,7 @@ Install dependencies by running
 npm install
 
 ```
+
 #### How to run project
 
 Run project by running the command:

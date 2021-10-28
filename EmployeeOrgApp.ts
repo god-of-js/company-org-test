@@ -11,13 +11,13 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
   move(employeeID: number, supervisorID: number): void {
     const employeeDataToMove = this.findSubordinateById(employeeID, this.ceo);
     const newEmployeeSupervisorData = this.findSubordinateById(supervisorID, this.ceo);
-
+    
     if (!employeeDataToMove || !newEmployeeSupervisorData) {
       throw new Error("Entity not found");
     }
 
     this.addEmployeeToSupervisor(employeeDataToMove.subordinate, newEmployeeSupervisorData.path);
-    
+
     const currentSupervisorPath = employeeDataToMove.path.slice(0, -1)
     this.removeEmployeeFromSupervisor(employeeID, currentSupervisorPath);
 
@@ -34,7 +34,6 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
 
   private removeEmployeeFromSupervisor(employeeId: number, path: number[]) {
     const employee = this.getEmployeeByPath(path).subordinates.find(e => e.uniqueId === employeeId);
-
     this.getEmployeeByPath(path).subordinates = this.getEmployeeByPath(path).subordinates.filter(e => e.uniqueId !== employeeId);
     this.getEmployeeByPath(path).subordinates.push(...employee?.subordinates || []);
   }
@@ -71,7 +70,6 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
 
     return null;
   }
-
 }
 
 export default EmployeeOrgApp;
