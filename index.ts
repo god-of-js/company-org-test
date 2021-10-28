@@ -9,5 +9,4 @@ const operations = (employeeID: number, supervisorID: number) => {
     employeeOrganization.redo();
 }
 
-operations(6,5);
-operations(9,2);
+operations(2,4);

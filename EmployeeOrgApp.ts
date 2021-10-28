@@ -11,7 +11,7 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
   move(employeeID: number, supervisorID: number): void {
     const employeeDataToMove = this.findSubordinateById(employeeID, this.ceo);
     const newEmployeeSupervisorData = this.findSubordinateById(supervisorID, this.ceo);
-    
+
     if (!employeeDataToMove || !newEmployeeSupervisorData) {
       throw new Error("Entity not found");
     }
