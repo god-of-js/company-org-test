@@ -9,60 +9,71 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
   }
 
   move(employeeID: number, supervisorID: number): void {
-    const subordinateData = this.findSubordinateById(
-      employeeID,
-      this.ceo
-    );
+    const employeeDataToMove = this.findSubordinateById(employeeID, this.ceo);
+    const newEmployeeSupervisorData = this.findSubordinateById(supervisorID, this.ceo);
 
-    if (subordinateData) {
+    if (!employeeDataToMove || !newEmployeeSupervisorData) {
+      throw new Error("Entity not found");
+    }
 
-      const supervisorIndex = this.findSubordinateIndex(supervisorID, this.ceo.subordinates);
-      const subordinateIndex = this.findSubordinateIndex(subordinateData.subordinate.uniqueId, this.ceo.subordinates, subordinateData.supervisorId);
+    const currentSupervisorPath = employeeDataToMove.path.slice(0, -1)
 
-      this.ceo.subordinates[supervisorIndex[0]].subordinates.push(subordinateData.subordinate);
+    this.addEmployeeToSupervisor(employeeID, newEmployeeSupervisorData.path)
 
-      if (subordinateIndex.length > 1) {
-        this.ceo.subordinates[subordinateIndex[0]].subordinates.splice(subordinateIndex[1], 1);
-      } else {
-        this.ceo.subordinates.splice(subordinateIndex[0], 1);
-      }
-
-      this.movedSubordinate = subordinateData;
-    } else throw new Error("Subordinate does not exist.");
+    this.removeEmployeeFromSupervisor(employeeID, currentSupervisorPath);
+    
+    this.movedSubordinate = employeeDataToMove;
   }
 
   undo(): void {
-    this.move(this.movedSubordinate.subordinate.uniqueId, this.movedSubordinate.supervisorId);
+    this.move(this.movedSubordinate.subordinate.uniqueId, this.movedSubordinate.supervisor.uniqueId);
   }
 
   redo(): void {
     this.undo();
   }
 
-  private findSubordinateById(id: number, employee: Employee): FoundSubordinate | null {
-    for (const s of employee.subordinates) {
-      if (s.uniqueId === id) return { subordinate: s, supervisorId: employee.uniqueId };
+  private removeEmployeeFromSupervisor(employeeId: number, path: number[]) {
+    const employee = this.getEmployeeByPath(path).subordinates.filter(e => e.uniqueId === employeeId);
 
-      const sub = this.findSubordinateById(id, s);
+    this.getEmployeeByPath(path).subordinates = this.getEmployeeByPath(path).subordinates.filter(e => e.uniqueId != employeeId);
+    this.getEmployeeByPath(path).subordinates.push(...employee[0].subordinates);
+  }
+
+  private addEmployeeToSupervisor(employeeId: number, path: number[]) {
+    const employeeToBeAdded = this.getEmployeeByPath(this.findSubordinateById(employeeId, this.ceo)?.path || []);
+
+    this.getEmployeeByPath(path).subordinates.push(employeeToBeAdded);
+  }
+
+  private getEmployeeByPath(path: number[]): Employee {
+    let emp = this.ceo;
+
+    for (const p of path) {
+      emp = emp.subordinates[p];
+    }
+
+    return emp;
+  }
+
+  private findSubordinateById(id: number, employee: Employee, path: number[] = []): FoundSubordinate | null {
+    if (id === 1) {
+      return { subordinate: employee, supervisor: employee, path: [] }
+    }
+
+    for (let i = 0; i < employee.subordinates.length; i++) {
+      const newPath = [...path, i];
+
+      if (employee.subordinates[i].uniqueId === id) return { subordinate: employee.subordinates[i], supervisor: employee, path: newPath };
+
+      const sub = this.findSubordinateById(id, employee.subordinates[i], newPath);
 
       if (sub) return sub;
     }
+
     return null;
   }
 
-  private findSubordinateIndex(id: number, subordinates: Employee[], supervisorID?: number,): number[] {
-    let index = subordinates.findIndex((sub) => sub.uniqueId === id);
-
-    if (index >= 0) return [index];
-
-    if (!supervisorID) throw new Error("Subordinate supervisor does not exist.")
-
-    const supIndex = this.findSubordinateIndex(supervisorID, this.ceo.subordinates, supervisorID)
-
-    const subIndex = this.findSubordinateIndex(id, subordinates[supIndex[0]].subordinates, supervisorID)
-
-    return [...supIndex, ...subIndex];
-  }
 }
 
 export default EmployeeOrgApp;

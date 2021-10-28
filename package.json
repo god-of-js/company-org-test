@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/god-of-js/company-org-test/issues"
   },
-  "homepage": "https://github.com/god-of-js/company-org-test#readme"
+  "homepage": "https://github.com/god-of-js/company-org-test#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "jest": "^27.3.1"
+  }
 }

@@ -6,7 +6,8 @@ export interface Employee {
 
 export interface FoundSubordinate {
   subordinate: Employee; 
-  supervisorId: number
+  supervisor: Employee;
+  path: number[];
 }
 
 
