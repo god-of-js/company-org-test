@@ -5,4 +5,4 @@ const employeeOrganization = new EmployeeOrgApp(ceo);
 
 employeeOrganization.move(2, 4);
 employeeOrganization.undo();
-// employeeOrganization.redo();
+employeeOrganization.redo();
