@@ -4,7 +4,7 @@
   "description": "an OOP test",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/god-of-js/company-org-test#readme",
   "devDependencies": {
     "@types/jest": "^27.0.2",
-    "jest": "^27.3.1"
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7"
   }
 }

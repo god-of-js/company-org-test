@@ -16,12 +16,11 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
       throw new Error("Entity not found");
     }
 
-    const currentSupervisorPath = employeeDataToMove.path.slice(0, -1)
-
-    this.addEmployeeToSupervisor(employeeID, newEmployeeSupervisorData.path)
-
-    this.removeEmployeeFromSupervisor(employeeID, currentSupervisorPath);
+    this.addEmployeeToSupervisor(employeeDataToMove.subordinate, newEmployeeSupervisorData.path);
     
+    const currentSupervisorPath = employeeDataToMove.path.slice(0, -1)
+    this.removeEmployeeFromSupervisor(employeeID, currentSupervisorPath);
+
     this.movedSubordinate = employeeDataToMove;
   }
 
@@ -34,16 +33,15 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
   }
 
   private removeEmployeeFromSupervisor(employeeId: number, path: number[]) {
-    const employee = this.getEmployeeByPath(path).subordinates.filter(e => e.uniqueId === employeeId);
+    const employee = this.getEmployeeByPath(path).subordinates.find(e => e.uniqueId === employeeId);
 
-    this.getEmployeeByPath(path).subordinates = this.getEmployeeByPath(path).subordinates.filter(e => e.uniqueId != employeeId);
-    this.getEmployeeByPath(path).subordinates.push(...employee[0].subordinates);
+    this.getEmployeeByPath(path).subordinates = this.getEmployeeByPath(path).subordinates.filter(e => e.uniqueId !== employeeId);
+    this.getEmployeeByPath(path).subordinates.push(...employee?.subordinates || []);
   }
 
-  private addEmployeeToSupervisor(employeeId: number, path: number[]) {
-    const employeeToBeAdded = this.getEmployeeByPath(this.findSubordinateById(employeeId, this.ceo)?.path || []);
-
-    this.getEmployeeByPath(path).subordinates.push(employeeToBeAdded);
+  private addEmployeeToSupervisor(employee: Employee, path: number[]) {
+    employee.subordinates = [];
+    this.getEmployeeByPath(path).subordinates.push(employee);
   }
 
   private getEmployeeByPath(path: number[]): Employee {
