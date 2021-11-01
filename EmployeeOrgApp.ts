@@ -29,7 +29,7 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
   }
 
   redo(): void {
-    this.undo();
+    this.move(this.movedSubordinate.subordinate.uniqueId, this.movedSubordinate.supervisor.uniqueId);
   }
 
   private removeEmployeeFromSupervisor(employeeId: number, path: number[]) {
