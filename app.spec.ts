@@ -1,7 +1,7 @@
 import EmployeeOrgApp from "./EmployeeOrgApp";
 import ceo from "./data";
 
-test("expect employee to not exist in previous superior", () => {
+test("expect employee to not exist in previous superior after moved", () => {
     const employeeOrganization = new EmployeeOrgApp({...ceo});
 
     employeeOrganization.move(2, 4);
@@ -9,7 +9,7 @@ test("expect employee to not exist in previous superior", () => {
     expect(employeeOrganization.ceo.subordinates.find(sub => sub.uniqueId === 2)).toBeUndefined()
 });
 
-test("expect employee to exist in new superior", () => {
+test("expect employee to exist in new superior after moved", () => {
     const employeeOrganization = new EmployeeOrgApp({...ceo});
     employeeOrganization.move(2, 5);
 
