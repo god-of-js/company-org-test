@@ -3,7 +3,7 @@ import { Employee, IEmployeeOrgApp, FoundSubordinate } from "./interfaces";
 class EmployeeOrgApp implements IEmployeeOrgApp {
   ceo: Employee;
   private movedSubordinate: FoundSubordinate = {} as FoundSubordinate;
-  private redoStack: FoundSubordinate[] = [];
+  private redoSubordinate: FoundSubordinate = {} as FoundSubordinate;
   constructor(ceo: Employee) {
     this.ceo = ceo;
   }
@@ -26,12 +26,12 @@ class EmployeeOrgApp implements IEmployeeOrgApp {
 
   undo(): void {
     this.move(this.movedSubordinate.subordinate.uniqueId, this.movedSubordinate.supervisor.uniqueId);
-    this.redoStack.unshift(this.movedSubordinate);
+    this.redoSubordinate = this.movedSubordinate;
   }
 
   redo(): void {
-    if(this.redoStack[0]) {
-      this.move(this.redoStack[0].subordinate.uniqueId, this.redoStack[0].supervisor.uniqueId);
+    if(this.redoSubordinate.subordinate) {
+      this.move(this.redoSubordinate.subordinate.uniqueId, this.redoSubordinate.supervisor.uniqueId);
     }
   }
 
